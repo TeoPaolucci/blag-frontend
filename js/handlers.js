@@ -31,9 +31,14 @@ $(document).ready(function() {
       switchView('main-page');
     } else if (location.hash === '#posts') {
       switchView('view-all');
-      api.getAllPosts(callback);
-      var html = allPostTemplate(serverData);
-      $('#view-all').html(html);
+      api.getAllPosts(function(err, data) {
+        if(err) {
+          console.error(err);
+          return;
+        }
+        var html = allPostTemplate(data);
+        $('#view-all').html(html);
+      });
     } else if (location.hash === '#create') {
       switchView('create');
     } else {
