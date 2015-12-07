@@ -92,6 +92,8 @@ var form2object = function(form) {
       data[$(this).attr('name')] = $(this).val();
     }
   });
+  console.log("Form output:");
+  console.log(data);
   return data;
 };
 
@@ -102,4 +104,5 @@ var callback = function callback(error, data) {
     return;
   }
   serverData = data;
+  console.log(serverData);
 };

@@ -63,7 +63,7 @@
   </nav>
 
   <!-- Main display? -->
-  <div class="col-md-12" id="main-page">
+  <div id="main-page">
     <form id="logreg-form">
       <input type="text" class="form-control" name="username" placeholder="Username">
       <input type="password" class="form-control" name="password" placeholder="Password">
@@ -76,15 +76,15 @@
   </div>
 
   <!-- multi post view -->
-  <div class="col-md-12" id="view-all">
+  <div id="view-all">
   </div>
 
   <!-- single post view -->
-  <div class="col-md-12" id="view-one">
+  <div id="view-one">
   </div>
 
   <!-- post creation view -->
-  <div class="col-md-12" id="create">
+  <div id="create">
     <form id="new-post">
       <input type="text" class="form-control" name="title" placeholder="Title">
       <textarea class="form-control" name="body" rows="5"></textarea>
@@ -93,7 +93,7 @@
   </div>
 
   <script id="template-view-all" type="text/x-handlebars-template">
-    {{#each posts}}
+    {{#each key}}
       <div>
         <h3><a href="#article/{{_id}}">{{title}}</a></h3>
         <h4>{{username}}</h4>
@@ -102,6 +102,11 @@
     {{/each}}
   </script>
 
+ <!--
+  <script id="template-view-all" type="text/x-handlebars-template">
+    <p>{{key}}</p>
+  </script>
+ -->
   <script id="template-view-one" type="text/x-handlebars-template">
     <article>
       <h3>{{title}}</h3>
