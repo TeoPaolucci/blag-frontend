@@ -33,9 +33,7 @@ var api = {
     this.ajax({
       method: 'GET',
       url: this.backend + '/logout',
-      contentType: 'application/json; charset=utf-8',
-      data: JSON.stringify(credentials),
-      dataType: 'json'
+      contentType: 'application/json; charset=utf-8'
     }, callback);
   },
 
@@ -53,6 +51,14 @@ var api = {
     this.ajax({
       method: 'GET',
       url: this.backend + '/posts',
+      contentType: 'application/json; charset=utf-8'
+    }, callback);
+  },
+
+  getLoggedUserPosts: function getLoggedUserPosts(callback) {
+    this.ajax({
+      method: 'GET',
+      url: this.backend + '/posts/user',
       contentType: 'application/json; charset=utf-8'
     }, callback);
   },

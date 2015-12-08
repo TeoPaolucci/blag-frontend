@@ -1,6 +1,14 @@
 'use strict';
 
 $(document).ready(function() {
+  $.ajaxSetup({
+    xhrFields : {
+      withCredentials : true
+    }
+  });
+
+  location.hash = '#';
+
   // functions and vars
   var switchView = function switchView(view) {
     $('#main-page').hide();
@@ -45,10 +53,25 @@ $(document).ready(function() {
       });
     }
 
+    // all logged in user posts
+    else if (location.hash === '#user-posts') {
+      switchView('view-all');
+      api.getLoggedUserPosts(function(err, data) {
+        if(err) {
+          console.error(err);
+          return;
+        }
+        var html = allPostTemplate(data);
+        $('#view-all').html(html);
+      });
+    }
+
     // create post form hash url
     else if (location.hash === '#create') {
       switchView('create');
     }
+
+    else if (location.hash === '#') {}
 
     // any other hash url, broken down by splitting the hash using '/'
     // ex. #/article/<some ID> --> [#, article, <some ID>]
@@ -77,12 +100,34 @@ $(document).ready(function() {
     e.preventDefault();
     var credentials = form2object(event.target);
     var button = e.target.buttonUsed;
+    var userObj;
     switch(button) {
-      case "login-submit": api.login(credentials, callback); break;
+      case "login-submit":
+        api.login(credentials, function(err, data) {
+          if(err) {
+            console.error(err);
+            return;
+          }
+          userObj = data;
+          $('#my-blag-nav').attr('href', '#user-posts');
+          $('#new-post-nav').attr('href', '#create');
+        });
+      break;
+
       case "register-submit": api.register(credentials, callback); break;
+
       case "newPass-submit": api.changePass(credentials, callback); break;
-      case "logout": api.logout(callback); break;
     }
+  });
+
+  $('#logout').on('click', function() {
+    api.logout(function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      userObj = null;
+    });
   });
 
   $("#register-submit, #login-submit").on('click', function(e) {
