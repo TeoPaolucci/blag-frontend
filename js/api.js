@@ -82,7 +82,7 @@ var api = {
   newPost: function newPost(content, callback) {
     this.ajax({
       method: 'POST',
-      url: this.backend + '/posts',
+      url: this.backend + '/posts/user',
       contentType: 'application/json; charset=utf-8',
       data: JSON.stringify(content),
       dataType: 'json'

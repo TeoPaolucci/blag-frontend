@@ -100,7 +100,6 @@ $(document).ready(function() {
     e.preventDefault();
     var credentials = form2object(event.target);
     var button = e.target.buttonUsed;
-    var userObj;
     switch(button) {
       case "login-submit":
         api.login(credentials, function(err, data) {
@@ -108,7 +107,6 @@ $(document).ready(function() {
             console.error(err);
             return;
           }
-          userObj = data;
           $('#my-blag-nav').attr('href', '#user-posts');
           $('#new-post-nav').attr('href', '#create');
         });
@@ -126,7 +124,6 @@ $(document).ready(function() {
         console.error(err);
         return;
       }
-      userObj = null;
     });
   });
 
@@ -137,7 +134,21 @@ $(document).ready(function() {
   $("#new-post").on('submit', function(e) {
     e.preventDefault();
     var post = form2object(event.target);
-    api.newPost(post, callback);
-    switchView('show-one');
-  })
+    api.newPost(post, function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      switchView('view-one');
+      var newPostID = data._id;
+      api.getSinglePost(newPostID, function(err, data) {
+        if(err) {
+          console.error(err);
+          return;
+        }
+        var html = onePostTemplate(data);
+        $('#view-one').html(html);
+      });
+    });
+  });
 });
