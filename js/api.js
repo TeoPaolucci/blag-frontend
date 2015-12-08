@@ -97,7 +97,7 @@ var form2object = function(form) {
   return data;
 };
 
-var serverData = {};
+var serverData;
 var callback = function callback(error, data) {
   if (error) {
     console.error(error);
