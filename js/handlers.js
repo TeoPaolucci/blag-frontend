@@ -27,9 +27,13 @@ $(document).ready(function() {
   var onePostTemplate = Handlebars.compile($('#template-view-one').html());
 
   var locationHashChanged = function locationHashChanged() {
+    // home page hash url (login/register/logout/password)
     if(location.hash === '#home') {
       switchView('main-page');
-    } else if (location.hash === '#posts') {
+    }
+
+    // all posts hash url
+    else if (location.hash === '#posts') {
       switchView('view-all');
       api.getAllPosts(function(err, data) {
         if(err) {
@@ -39,15 +43,27 @@ $(document).ready(function() {
         var html = allPostTemplate(data);
         $('#view-all').html(html);
       });
-    } else if (location.hash === '#create') {
+    }
+
+    // create post form hash url
+    else if (location.hash === '#create') {
       switchView('create');
-    } else {
+    }
+
+    // any other hash url, broken down by splitting the hash using '/'
+    // ex. #/article/<some ID> --> [#, article, <some ID>]
+    else {
       var extension = location.hash.split('/');
       if(extension[1] === 'article') {
         switchView('view-one');
-        api.getSinglePost(extension[2], callback);
-        var html = onePostTemplate(serverData);
-        $('#view-one').html(html);
+        api.getSinglePost(extension[2], function(err, data) {
+          if(err) {
+            console.error(err);
+            return;
+          }
+          var html = onePostTemplate(data);
+          $('#view-one').html(html);
+        });
       }
     }
   };

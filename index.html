@@ -92,25 +92,22 @@
     </form>
   </div>
 
+  <!-- View all posts handlebars template -->
   <script id="template-view-all" type="text/x-handlebars-template">
     {{#each key}}
       <div>
-        <h3><a href="#article/{{_id}}">{{title}}</a></h3>
+        <h3><a href="#/article/{{_id}}">{{title}}</a></h3>
         <h4>{{username}}</h4>
         <div>{{body}}</div>
       </div>
     {{/each}}
   </script>
 
- <!--
-  <script id="template-view-all" type="text/x-handlebars-template">
-    <p>{{key}}</p>
-  </script>
- -->
+  <!-- View single post handlebars template -->
   <script id="template-view-one" type="text/x-handlebars-template">
     <article>
       <h3>{{title}}</h3>
-      <h4>{{username}}</h4>
+      <h4>By: {{username}}</h4>
       <div>{{body}}</div>
     </article>
   </script>
