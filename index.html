@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Blaggit</title>
+
+  <!-- Bootstrap Core CSS -->
+  <link href="css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link href="css/blog-home.css" rel="stylesheet">
+
+  <!-- XBBCode CSS -->
+  <link rel="stylesheet" type="text/css" href="css/xbbcode.css">
+
+  <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+</head>
+
+<body>
+  <!-- Navigation -->
+  <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#home">Blaggit</a>
+      </div>
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li>
+            <a href="#home">Login</a>
+          </li>
+          <li>
+            <a id="my-blag-nav" href="#">My Blag</a>
+          </li>
+          <li>
+            <a href="#posts">All Posts</a>
+          </li>
+          <li>
+            <a id="new-post-nav" href="#">New Post</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+  </nav>
+
+  <!-- Main display? -->
+  <div id="main-page">
+    <form id="logreg-form">
+      <input type="text" class="form-control" name="username" placeholder="Username">
+      <input type="password" class="form-control" name="password" placeholder="Password">
+      <br>
+      <input type="submit" class="btn btn-info" id="login-submit" value="Login">
+      <input type="submit" class="btn btn-info" id="register-submit" value="Register">
+      <input type="submit" class="btn btn-warning" id="newPass-submit" value="Update Password">
+      <input type="button" class="btn btn-warning" id="logout" value="Logout">
+    </form>
+  </div>
+
+  <!-- multi post view -->
+  <div id="view-all">
+  </div>
+
+  <!-- single post view -->
+  <div id="view-one">
+  </div>
+
+  <!-- post creation view -->
+  <div id="create">
+    <form id="new-post">
+      <input type="text" class="form-control" name="title" placeholder="Title">
+      <textarea class="form-control" name="body" rows="5"></textarea>
+      <input type="submit" class="btn btn-info" id="post-submit" value="New Post">
+    </form>
+  </div>
+
+  <!-- post update view -->
+  <div id="update-view">
+    <input type="hidden" id="update-ID">
+    <form id="update-post">
+      <input id="update-title" type="text" class="form-control" name="title" placeholder="Title">
+      <textarea id="update-body" class="form-control" name="body" rows="5"></textarea>
+      <input type="submit" class="btn btn-info" id="update-submit" value="Update">
+    </form>
+  </div>
+
+  <!-- View all posts handlebars template -->
+  <script id="template-view-all" type="text/x-handlebars-template">
+    {{#each posts}}
+      <div>
+        <h3><a href="#/article/{{_id}}">{{title}}</a></h3>
+        <h4>{{username}}</h4>
+        <div>{{{xbbcodeParse body}}}</div>
+      </div>
+    {{/each}}
+  </script>
+
+  <!-- View single post handlebars template -->
+  <script id="template-view-one" type="text/x-handlebars-template">
+    <article>
+      <h3 id="one-post-title">{{title}}</h3>
+      <h4>By: {{username}}</h4>
+      <div id="one-post-body">{{{xbbcodeParse body}}}</div>
+    </article>
+    <input type="button" id="update" value="Update" class="btn btn-warning">
+    <input type="button" id="delete" value="Delete" class="btn btn-danger">
+  </script>
+
+  <!-- jQuery -->
+  <script src="js/jquery.js"></script>
+
+  <!-- Bootstrap Core JavaScript -->
+  <script src="js/bootstrap.min.js"></script>
+
+  <!-- Handlebars -->
+  <script src="/js/handlebars-v4.0.5.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- XBBCode -->
+  <script src="/js/xbbcode.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- API -->
+  <script src="js/api.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- Handlers -->
+  <script src="js/handlers.js" type="text/javascript" charset="utf-8"></script>
+
+</body>
+
+</html>
