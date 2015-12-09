@@ -189,3 +189,14 @@ var onePostCallback = function onePostCallback(error, data) {
     $('#update-view').show();
   });
 };
+
+Handlebars.registerHelper('xbbcodeParse', function(input) {
+  var result = XBBCODE.process({
+      text: input,
+      removeMisalignedTags: false,
+      addInLineBreaks: true
+  });
+  console.log("Errors: " + result.error);
+  console.dir(result.errorQueue);
+  return result.html;
+});
