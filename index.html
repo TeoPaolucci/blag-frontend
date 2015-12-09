@@ -17,6 +17,9 @@
   <!-- Custom CSS -->
   <link href="css/blog-home.css" rel="stylesheet">
 
+  <!-- XBBCode CSS -->
+  <link rel="stylesheet" type="text/css" href="css/xbbcode.css">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -108,7 +111,7 @@
       <div>
         <h3><a href="#/article/{{_id}}">{{title}}</a></h3>
         <h4>{{username}}</h4>
-        <div>{{body}}</div>
+        <div>{{{xbbcodeParse body}}}</div>
       </div>
     {{/each}}
   </script>
@@ -119,7 +122,7 @@
       <span id="one-post-ID" display="none">{{_id}}</span>
       <h3 id="one-post-title">{{title}}</h3>
       <h4>By: {{username}}</h4>
-      <div id="one-post-body">{{body}}</div>
+      <div id="one-post-body">{{{xbbcodeParse body}}}</div>
     </article>
     <input type="button" id="update" value="Update" class="btn btn-warning">
     <input type="button" id="delete" value="Delete" class="btn btn-danger">
@@ -133,6 +136,9 @@
 
   <!-- Handlebars -->
   <script src="/js/handlebars-v4.0.5.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- XBBCode -->
+  <script src="/js/xbbcode.js" type="text/javascript" charset="utf-8"></script>
 
   <!-- API -->
   <script src="js/api.js" type="text/javascript" charset="utf-8"></script>
