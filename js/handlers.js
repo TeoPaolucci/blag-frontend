@@ -10,30 +10,6 @@ $(document).ready(function() {
   location.hash = '#';
 
   // functions and vars
-  var switchView = function switchView(view) {
-    $('#main-page').hide();
-    $('#view-all').hide();
-    $('#view-one').hide();
-    $('#create').hide();
-
-    if(view === 'view-all') {
-      console.log('switched to view all');
-      $('#view-all').show();
-    } else if (view === 'view-one') {
-      console.log('switched to view one');
-      $('#view-one').show();
-    } else if (view === 'create') {
-      console.log('switched to create');
-      $('#create').show();
-    } else {
-      console.log('switched to view main');
-      $('#main-page').show();
-    }
-  };
-
-  var allPostTemplate = Handlebars.compile($('#template-view-all').html());
-  var onePostTemplate = Handlebars.compile($('#template-view-one').html());
-
   var locationHashChanged = function locationHashChanged() {
     // home page hash url (login/register/logout/password)
     if(location.hash === '#home') {
@@ -79,14 +55,7 @@ $(document).ready(function() {
       var extension = location.hash.split('/');
       if(extension[1] === 'article') {
         switchView('view-one');
-        api.getSinglePost(extension[2], function(err, data) {
-          if(err) {
-            console.error(err);
-            return;
-          }
-          var html = onePostTemplate(data);
-          $('#view-one').html(html);
-        });
+        api.getSinglePost(extension[2], onePostCallback);
       }
     }
   };
@@ -101,7 +70,7 @@ $(document).ready(function() {
     var credentials = form2object(event.target);
     var button = e.target.buttonUsed;
     switch(button) {
-      case "login-submit":
+      case 'login-submit':
         api.login(credentials, function(err, data) {
           if(err) {
             console.error(err);
@@ -112,9 +81,9 @@ $(document).ready(function() {
         });
       break;
 
-      case "register-submit": api.register(credentials, callback); break;
+      case 'register-submit': api.register(credentials, callback); break;
 
-      case "newPass-submit": api.changePass(credentials, callback); break;
+      case 'newPass-submit': api.changePass(credentials, callback); break;
     }
   });
 
@@ -127,11 +96,11 @@ $(document).ready(function() {
     });
   });
 
-  $("#register-submit, #login-submit").on('click', function(e) {
+  $('#register-submit, #login-submit').on('click', function(e) {
     e.target.parentNode.buttonUsed = e.target.id;
   });
 
-  $("#new-post").on('submit', function(e) {
+  $('#new-post').on('submit', function(e) {
     e.preventDefault();
     var post = form2object(event.target);
     api.newPost(post, function(err, data) {
@@ -141,14 +110,23 @@ $(document).ready(function() {
       }
       switchView('view-one');
       var newPostID = data._id;
-      api.getSinglePost(newPostID, function(err, data) {
-        if(err) {
-          console.error(err);
-          return;
-        }
-        var html = onePostTemplate(data);
-        $('#view-one').html(html);
-      });
+      api.getSinglePost(newPostID, onePostCallback);
     });
   });
+
+  $('#update-submit').on('submit', function(e) {
+    e.preventDefault();
+    var post = form2object(event.target);
+    var postID = $('#update-ID').val();
+    api.updatePost(postID, post, function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      switchView('view-one');
+      var newPostID = data._id;
+      api.getSinglePost(newPostID, onePostCallback);
+    });
+  });
+
 });
