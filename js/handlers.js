@@ -1,48 +1,61 @@
 'use strict';
 
 $(document).ready(function() {
-  // functions and vars
-  var switchView = function switchView(view) {
-    $('#main-page').hide();
-    $('#view-all').hide();
-    $('#view-one').hide();
-    $('#create').hide();
-
-    if(view === 'view-all') {
-      console.log('switched to view all');
-      $('#view-all').show();
-    } else if (view === 'view-one') {
-      console.log('switched to view one');
-      $('#view-one').show();
-    } else if (view === 'create') {
-      console.log('switched to create');
-      $('#create').show();
-    } else {
-      console.log('switched to view main');
-      $('#main-page').show();
+  $.ajaxSetup({
+    xhrFields : {
+      withCredentials : true
     }
-  };
+  });
 
-  var allPostTemplate = Handlebars.compile($('#template-view-all').html());
-  var onePostTemplate = Handlebars.compile($('#template-view-one').html());
+  location.hash = '#';
 
+  // functions and vars
   var locationHashChanged = function locationHashChanged() {
+    // home page hash url (login/register/logout/password)
     if(location.hash === '#home') {
       switchView('main-page');
-    } else if (location.hash === '#posts') {
+    }
+
+    // all posts hash url
+    else if (location.hash === '#posts') {
       switchView('view-all');
-      api.getAllPosts(callback);
-      var html = allPostTemplate(serverData);
-      $('#view-all').html(html);
-    } else if (location.hash === '#create') {
+      api.getAllPosts(function(err, data) {
+        if(err) {
+          console.error(err);
+          return;
+        }
+        var html = allPostTemplate(data);
+        $('#view-all').html(html);
+      });
+    }
+
+    // all logged in user posts
+    else if (location.hash === '#user-posts') {
+      switchView('view-all');
+      api.getLoggedUserPosts(function(err, data) {
+        if(err) {
+          console.error(err);
+          return;
+        }
+        var html = allPostTemplate(data);
+        $('#view-all').html(html);
+      });
+    }
+
+    // create post form hash url
+    else if (location.hash === '#create') {
       switchView('create');
-    } else {
+    }
+
+    else if (location.hash === '#') {}
+
+    // any other hash url, broken down by splitting the hash using '/'
+    // ex. #/article/<some ID> --> [#, article, <some ID>]
+    else {
       var extension = location.hash.split('/');
       if(extension[1] === 'article') {
         switchView('view-one');
-        api.getSinglePost(extension[2], callback);
-        var html = onePostTemplate(serverData);
-        $('#view-one').html(html);
+        api.getSinglePost(extension[2], onePostCallback);
       }
     }
   };
@@ -57,21 +70,63 @@ $(document).ready(function() {
     var credentials = form2object(event.target);
     var button = e.target.buttonUsed;
     switch(button) {
-      case "login-submit": api.login(credentials, callback); break;
-      case "register-submit": api.register(credentials, callback); break;
-      case "newPass-submit": api.changePass(credentials, callback); break;
-      case "logout": api.logout(callback); break;
+      case 'login-submit':
+        api.login(credentials, function(err, data) {
+          if(err) {
+            console.error(err);
+            return;
+          }
+          $('#my-blag-nav').attr('href', '#user-posts');
+          $('#new-post-nav').attr('href', '#create');
+        });
+      break;
+
+      case 'register-submit': api.register(credentials, callback); break;
+
+      case 'newPass-submit': api.changePass(credentials, callback); break;
     }
   });
 
-  $("#register-submit, #login-submit").on('click', function(e) {
+  $('#logout').on('click', function() {
+    api.logout(function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+    });
+  });
+
+  $('#register-submit, #login-submit').on('click', function(e) {
     e.target.parentNode.buttonUsed = e.target.id;
   });
 
-  $("#new-post").on('submit', function(e) {
+  $('#new-post').on('submit', function(e) {
     e.preventDefault();
     var post = form2object(event.target);
-    api.newPost(post, callback);
-    switchView('show-one');
-  })
+    api.newPost(post, function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      switchView('view-one');
+      var newPostID = data._id;
+      api.getSinglePost(newPostID, onePostCallback);
+    });
+  });
+
+  $('#update-post').on('submit', function(e) {
+    e.preventDefault();
+    var post = form2object(event.target);
+    var postID = $('#update-ID').val();
+    api.updatePost(postID, post, function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      switchView('view-one');
+      var newPostID = data._id;
+      api.getSinglePost(newPostID, onePostCallback);
+    });
+  });
+
 });

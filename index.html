@@ -17,6 +17,9 @@
   <!-- Custom CSS -->
   <link href="css/blog-home.css" rel="stylesheet">
 
+  <!-- XBBCode CSS -->
+  <link rel="stylesheet" type="text/css" href="css/xbbcode.css">
+
   <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
   <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
   <!--[if lt IE 9]>
@@ -46,14 +49,14 @@
           <li>
             <a href="#home">Login</a>
           </li>
-          <!-- <li>
-            <a href="#posts/user">My Blag</a>
-          </li> -->
+          <li>
+            <a id="my-blag-nav" href="#">My Blag</a>
+          </li>
           <li>
             <a href="#posts">All Posts</a>
           </li>
           <li>
-            <a href="#create">New Post</a>
+            <a id="new-post-nav" href="#">New Post</a>
           </li>
         </ul>
       </div>
@@ -63,7 +66,7 @@
   </nav>
 
   <!-- Main display? -->
-  <div class="col-md-12" id="main-page">
+  <div id="main-page">
     <form id="logreg-form">
       <input type="text" class="form-control" name="username" placeholder="Username">
       <input type="password" class="form-control" name="password" placeholder="Password">
@@ -76,15 +79,15 @@
   </div>
 
   <!-- multi post view -->
-  <div class="col-md-12" id="view-all">
+  <div id="view-all">
   </div>
 
   <!-- single post view -->
-  <div class="col-md-12" id="view-one">
+  <div id="view-one">
   </div>
 
   <!-- post creation view -->
-  <div class="col-md-12" id="create">
+  <div id="create">
     <form id="new-post">
       <input type="text" class="form-control" name="title" placeholder="Title">
       <textarea class="form-control" name="body" rows="5"></textarea>
@@ -92,22 +95,36 @@
     </form>
   </div>
 
+  <!-- post update view -->
+  <div id="update-view">
+    <input type="hidden" id="update-ID">
+    <form id="update-post">
+      <input id="update-title" type="text" class="form-control" name="title" placeholder="Title">
+      <textarea id="update-body" class="form-control" name="body" rows="5"></textarea>
+      <input type="submit" class="btn btn-info" id="update-submit" value="Update">
+    </form>
+  </div>
+
+  <!-- View all posts handlebars template -->
   <script id="template-view-all" type="text/x-handlebars-template">
     {{#each posts}}
       <div>
-        <h3><a href="#article/{{_id}}">{{title}}</a></h3>
+        <h3><a href="#/article/{{_id}}">{{title}}</a></h3>
         <h4>{{username}}</h4>
-        <div>{{body}}</div>
+        <div>{{{xbbcodeParse body}}}</div>
       </div>
     {{/each}}
   </script>
 
+  <!-- View single post handlebars template -->
   <script id="template-view-one" type="text/x-handlebars-template">
     <article>
-      <h3>{{title}}</h3>
-      <h4>{{username}}</h4>
-      <div>{{body}}</div>
+      <h3 id="one-post-title">{{title}}</h3>
+      <h4>By: {{username}}</h4>
+      <div id="one-post-body">{{{xbbcodeParse body}}}</div>
     </article>
+    <input type="button" id="update" value="Update" class="btn btn-warning">
+    <input type="button" id="delete" value="Delete" class="btn btn-danger">
   </script>
 
   <!-- jQuery -->
@@ -118,6 +135,9 @@
 
   <!-- Handlebars -->
   <script src="/js/handlebars-v4.0.5.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- XBBCode -->
+  <script src="/js/xbbcode.js" type="text/javascript" charset="utf-8"></script>
 
   <!-- API -->
   <script src="js/api.js" type="text/javascript" charset="utf-8"></script>
