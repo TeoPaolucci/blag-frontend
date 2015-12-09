@@ -114,7 +114,7 @@ $(document).ready(function() {
     });
   });
 
-  $('#update-submit').on('submit', function(e) {
+  $('#update-post').on('submit', function(e) {
     e.preventDefault();
     var post = form2object(event.target);
     var postID = $('#update-ID').val();
