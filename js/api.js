@@ -191,8 +191,10 @@ var onePostCallback = function onePostCallback(error, data) {
 };
 
 Handlebars.registerHelper('xbbcodeParse', function(input) {
+  var noHTMLinput = input.replace(/<(?:.|\n)*?>/gm, '');
+
   var result = XBBCODE.process({
-      text: input,
+      text: noHTMLinput,
       removeMisalignedTags: false,
       addInLineBreaks: true
   });
