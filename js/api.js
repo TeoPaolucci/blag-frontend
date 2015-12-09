@@ -1,5 +1,5 @@
 var api = {
-  backend: 'http://localhost:3000',
+  backend: 'https://arcane-stream-6680.herokuapp.com',
 
   ajax: function(config, cb) {
     $.ajax(config).done(function(data, textStatus, jqxhr) {
