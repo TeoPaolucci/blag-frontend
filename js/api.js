@@ -87,6 +87,47 @@ var api = {
       data: JSON.stringify(content),
       dataType: 'json'
     }, callback);
+  },
+
+  deletePost: function deletePost(id, callback) {
+    this.ajax({
+      method: 'DELETE',
+      url: this.backend + '/posts/article/' + id
+    }, callback);
+  },
+
+  updatePost: function updatePost(id, content, callback) {
+    this.ajax({
+      method: 'PATCH',
+      url: this.backend + '/posts/article/' + id,
+      contentType: 'application/json; charset=utf-8',
+      data: JSON.stringify(content),
+      dataType: 'json'
+    }, callback);
+  }
+};
+
+var switchView = function switchView(view) {
+  $('#main-page').hide();
+  $('#view-all').hide();
+  $('#view-one').hide();
+  $('#create').hide();
+  $('#update-view').hide();
+
+  if(view === 'view-all') {
+    console.log('switched to view all');
+    $('#view-all').show();
+  } else if (view === 'view-one') {
+    console.log('switched to view one');
+    $('#view-one').show();
+  } else if (view === 'create') {
+    console.log('switched to create');
+    $('#create').show();
+  } else if (view === 'update-view') {
+    $('#update-view').show();
+  } else {
+    console.log('switched to view main');
+    $('#main-page').show();
   }
 };
 
@@ -103,6 +144,9 @@ var form2object = function(form) {
   return data;
 };
 
+var allPostTemplate = Handlebars.compile($('#template-view-all').html());
+var onePostTemplate = Handlebars.compile($('#template-view-one').html());
+
 var serverData;
 var callback = function callback(error, data) {
   if (error) {
@@ -111,4 +155,37 @@ var callback = function callback(error, data) {
   }
   serverData = data;
   console.log(serverData);
+};
+
+var onePostCallback = function onePostCallback(error, data) {
+  if(error) {
+    console.error(err);
+    return;
+  }
+  var html = onePostTemplate(data);
+  $('#view-one').html(html);
+
+  $('#delete').on('click', function() {
+    api.deletePost(data._id, callback);
+    switchView('view-all');
+    api.getUserPosts(data.userID, function(err, data) {
+      if(err) {
+        console.error(err);
+        return;
+      }
+      var html = allPostTemplate(data);
+      $('#view-all').html(html);
+    });
+
+  });
+
+  $('#update').on('click', function() {
+    var oldTitle = data.title;
+    var oldBody = data.body;
+    var oldID = data._id;
+    $('#update-title').val(oldTitle);
+    $('#update-body').val(oldBody);
+    $('#update-ID').val(oldID);
+    $('#update-view').show();
+  });
 };
